@@ -1,0 +1,16 @@
+# Local terraform directories (the heavy stuff)
+.terraform/
+
+# Terraform state files (these belong in the GCS bucket, NOT GitHub)
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# Terraform lock file (keeps versions consistent)
+.terraform.lock.hcl
+
+# Variable files (these might contain secret Project IDs)
+*.tfvars
+
+# Any Google Cloud JSON keys you might have downloaded
+*.json
