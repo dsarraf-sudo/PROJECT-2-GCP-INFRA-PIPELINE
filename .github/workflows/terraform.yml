@@ -8,10 +8,18 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform Action"
+    name: "Terraform ${{ matrix.env }}"
     runs-on: ubuntu-latest
     
-    # Connects to the Secrets you added in GitHub Settings
+    # This connects the 'prod' job to the "production" environment you created in Settings.
+    # The 'dev' job will use 'development' (which has no rules and runs instantly).
+    environment: ${{ matrix.env == 'prod' && 'production' || 'development' }}
+
+    strategy:
+      fail-fast: false # If Dev fails, Prod keeps running so you can see both results.
+      matrix:
+        env: [dev, prod]
+
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -23,20 +31,21 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # --- 1. INITIALIZE ---
+      # Uses the matrix variable to enter the correct folder (environments/dev or environments/prod)
       - name: Terraform Init
-        working-directory: ./environments/dev
+        working-directory: ./environments/${{ matrix.env }}
         run: terraform init
 
-      # --- 2. THE PLAN (Always runs) ---
-      # This shows you what will happen without actually changing GCP yet.
+      # Shows you a preview of the changes. This runs for both Pull Requests and Pushes.
       - name: Terraform Plan
-        working-directory: ./environments/dev
+        working-directory: ./environments/${{ matrix.env }}
         run: terraform plan -var="project_id=$GCP_PROJECT_ID"
 
-      # --- 3. THE APPLY (Only runs on Main) ---
-      # This "Gate" ensures that only code merged into 'main' actually builds resources.
+      # THE SAFETY GATE:
+      # 1. Must be on the 'main' branch.
+      # 2. Must be a 'push' (meaning the PR was merged).
+      # 3. If it is 'prod', it will PAUSE here and wait for your manual approval in GitHub.
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: ./environments/dev
+        working-directory: ./environments/${{ matrix.env }}
         run: terraform apply -auto-approve -var="project_id=$GCP_PROJECT_ID"
