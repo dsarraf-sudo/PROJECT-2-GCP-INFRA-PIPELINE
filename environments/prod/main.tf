@@ -4,6 +4,7 @@ module "prod_network" {
   vpc_name = "prod-vpc"
   ip_range = "10.0.2.0/24" # Dev was 10.0.1.0/24
   region   = "us-east1"    # You can use a different region for Prod
+  environment = "prod"
 }
 
 # 2. Prod Storage
