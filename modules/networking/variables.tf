@@ -12,3 +12,8 @@ variable "region" {
   description = "The GCP region"
   type        = string
 }
+
+variable "environment" {
+  type        = string
+  description = "dev or prod"
+}
