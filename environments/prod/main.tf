@@ -13,9 +13,11 @@ module "prod_storage" {
   bucket_name = "prod-bucket-assets-${var.project_id}" 
 }
 
+
 # 3. Prod VM
 module "prod_vm" {
   source        = "../../modules/compute"
   instance_name = "prod-server"
-  subnet_id     = module.prod_network.subnet_id 
+  subnet_id     = module.prod_network.subnet_id
+  zone          = "us-east1-b" 
 }
