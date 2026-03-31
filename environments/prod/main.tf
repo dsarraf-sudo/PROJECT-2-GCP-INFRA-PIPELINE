@@ -11,6 +11,8 @@ module "prod_network" {
 module "prod_storage" {
   source      = "../../modules/storage"
   bucket_name = "prod-bucket-assets-${var.project_id}" 
+  project_id  = var.project_id  
+  environment = "dev" 
 }
 
 
