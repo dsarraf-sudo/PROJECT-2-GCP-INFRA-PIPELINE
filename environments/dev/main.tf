@@ -9,7 +9,9 @@ module "networking" {
 
 module "storage" {
   source      = "../../modules/storage"
-  bucket_name = "dev-bucket-${var.project_id}" 
+  bucket_name = "dev-bucket-${var.project_id}"
+  project_id  = var.project_id  
+  environment = "dev" 
 }
 
 module "compute" {
