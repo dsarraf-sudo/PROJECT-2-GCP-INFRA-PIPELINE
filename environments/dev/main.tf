@@ -8,6 +8,7 @@ module "networking" {
 }
 
 
+
 module "storage" {
   source      = "../../modules/storage"
   bucket_name = "dev-bucket-${var.project_id}"
