@@ -16,6 +16,7 @@ module "storage" {
   environment = "dev" 
 }
 
+
 module "compute" {
   source        = "../../modules/compute"
   instance_name = "dev-vm"
