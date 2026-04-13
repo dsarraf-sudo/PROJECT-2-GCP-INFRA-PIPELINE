@@ -15,5 +15,13 @@ resource "google_storage_bucket" "archive_storage" {
   storage_class = "ARCHIVE" # This shows you know GCP storage classes!
   force_destroy = true
 }
+resource "google_storage_bucket" "archive_storage" {
+  name          = "archive-storage1-${var.project_id}-${var.environment}"
+  location      = "US"
+  storage_class = "ARCHIVE" # This shows you know GCP storage classes!
+  force_destroy = true
+}
+
+
 
 
